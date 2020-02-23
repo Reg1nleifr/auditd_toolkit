@@ -2,7 +2,7 @@
 auditd_toolkit.sh
 script for configuring auditd collection
 
-# rsyslog forwarder example
+# rsyslog forwarder/listener example
 rsyslog/\*.conf
 can be used for forwarding audit logs - although it is recommended to use audisp instead.
 
