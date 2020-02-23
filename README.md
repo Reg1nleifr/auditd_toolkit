@@ -8,6 +8,10 @@ can be used for forwarding audit logs - although it is recommended to use audisp
 
 # audit rules examples
 rules.d/ .rules
+
 ruleset that is recommended for any server.
+
 rules.d\ .<webservername>.optional - optional if the webserver is installed. Needs adjustment.
+  
 rules.d\ .heavyload.optional - optional if the server can handle these events.
+
