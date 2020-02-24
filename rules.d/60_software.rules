@@ -1,0 +1,53 @@
+# Software Management ---------------------------------------------------------
+
+# RPM (Redhat/CentOS/Fedora)
+-w /usr/bin/rpm -p x -k software_mgmt
+-w /usr/bin/yum -p x -k software_mgmt
+-w /usr/bin/dnf -p x -k software_mgmt
+
+# YAST/Zypper/RPM (SuSE)
+-w /sbin/yast -p x -k yast
+-w /sbin/yast2 -p x -k yast
+-w /bin/rpm -p x -k software_mgmt
+-w /usr/bin/zypper -k software_mgmt
+
+# DPKG / APT-GET (Debian/Ubuntu)
+-w /usr/bin/dpkg -p x -k software_mgmt
+-w /usr/bin/apt-add-repository -p x -k software_mgmt
+-w /usr/bin/apt-get -p x -k software_mgmt
+-w /usr/bin/aptitude -p x -k software_mgmt
+
+# Special Software ------------------------------------------------------------
+
+## GDS specific secrets
+-w /etc/puppet/ssl -p wa -k puppet_ssl
+
+## IBM Bigfix BESClient
+-a exit,always -F arch=b64 -S open -F dir=/opt/BESClient -F success=0 -k soft_besclient
+-w /var/opt/BESClient/ -p wa -k soft_besclient
+
+## CHEF https://www.chef.io/chef/
+-w /etc/chef -p wa -k soft_chef
+
+### KVM
+-w /usr/bin/virsh -p x -k kvm
+-w /etc/libvirt/ -p w -k kvm
+
+### Docker
+-w /usr/bin/dockerd -p x -k docker
+-w /usr/bin/docker -p x -k docker
+-w /usr/bin/docker-containerd -p x -k docker
+-w /usr/bin/docker-runc -p x -k docker
+-w /var/lib/docker/ -p w -k docker
+-w /etc/docker/ -p w -k docker
+-w /etc/sysconfig/docker -p w -k docker
+-w /etc/sysconfig/docker-storage -p w -k docker
+-w /usr/lib/systemd/system/docker.service -p w -k docker
+
+### Kubelet
+-w /usr/bin/kubelet -p x -k kubelet
+
+# Backup Software ------------------------------------------------------------
+# SUSE / Btrfs backup
+-w /usr/sbin/snapperd -p x -k snapperd_backup
+

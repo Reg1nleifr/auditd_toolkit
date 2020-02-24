@@ -1,0 +1,56 @@
+# Special Rules ---------------------------------------------------------------
+## Process ID change (switching accounts) applications
+-w /bin/su -p x -k priv_esc
+-w /usr/bin/sudo -p x -k priv_esc
+-w /etc/sudoers -p rw -k priv_esc
+
+## 32bit API Exploitation
+### If you are on a 64 bit platform, everything _should_ be running
+### in 64 bit mode. This rule will detect any use of the 32 bit syscalls
+### because this might be a sign of someone exploiting a hole in the 32
+### bit API.
+-a always,exit -F arch=b32 -S all -k 32bit_api
+
+## Reconnaissance
+-w /usr/bin/whoami -p x -k recon
+-w /usr/bin/uname -p x -k recon
+-w /etc/issue -p r -k recon
+-w /etc/redhat-release -p r -k recon
+-w /etc/hostname -p r -k recon
+-w /usr/bin/id -p x -k recon
+
+## Suspicious activity
+-w /usr/bin/wget -p x -k susp_activity
+-w /usr/bin/curl -p x -k susp_activity
+-w /usr/bin/base64 -p x -k susp_activity
+-w /bin/nc -p x -k susp_activity
+-w /bin/netcat -p x -k susp_activity
+-w /usr/bin/ncat -p x -k susp_activity
+-w /usr/bin/ssh -p x -k susp_activity
+-w /usr/bin/socat -p x -k susp_activity
+-w /usr/bin/wireshark -p x -k susp_activity
+-w /usr/bin/rawshark -p x -k susp_activity
+-w /usr/bin/rdesktop -p x -k sbin_susp
+
+## Sbin suspicious activity
+-w /sbin/iptables -p x -k sbin_susp
+-w /sbin/ifconfig -p x -k sbin_susp
+-w /usr/sbin/tcpdump -p x -k sbin_susp
+-w /usr/sbin/traceroute -p x -k sbin_susp
+
+## Injection
+### These rules watch for code injection by the ptrace facility.
+### This could indicate someone trying to do something bad or just debugging
+-a always,exit -F arch=b32 -S ptrace -k tracing
+-a always,exit -F arch=b64 -S ptrace -k tracing
+-a always,exit -F arch=b32 -S ptrace -F a0=0x4 -k code_injection
+-a always,exit -F arch=b64 -S ptrace -F a0=0x4 -k code_injection
+-a always,exit -F arch=b32 -S ptrace -F a0=0x5 -k data_injection
+-a always,exit -F arch=b64 -S ptrace -F a0=0x5 -k data_injection
+-a always,exit -F arch=b32 -S ptrace -F a0=0x6 -k register_injection
+-a always,exit -F arch=b64 -S ptrace -F a0=0x6 -k register_injection
+
+## Privilege Abuse
+### The purpose of this rule is to detect when an admin may be abusing power by looking in user's home dir.
+-a always,exit -F dir=/home -F uid=0 -F auid>=1000 -F auid!=4294967295 -C auid!=obj_uid -k power_abuse
+
