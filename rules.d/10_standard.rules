@@ -9,22 +9,22 @@
 # Rules -----------------------------------------------------------------------
 
 ## Kernel parameters
--w /etc/sysctl.conf -p wa -k sysctl
+-w /etc/sysctl.conf -p wa -k T1215_Kernel_Modules_and_Extensions
 
 ## Kernel module loading and unloading
--a always,exit -F perm=x -F auid!=-1 -F path=/bin/kmod -k modules
--a always,exit -F perm=x -F auid!=-1 -F path=/sbin/insmod -k modules
--a always,exit -F perm=x -F auid!=-1 -F path=/sbin/modprobe -k modules
--a always,exit -F perm=x -F auid!=-1 -F path=/sbin/rmmod -k modules
--a always,exit -F arch=b64 -S finit_module -S init_module -S delete_module -F auid!=-1 -k modules
--a always,exit -F arch=b32 -S finit_module -S init_module -S delete_module -F auid!=-1 -k modules
+-a always,exit -F perm=x -F auid!=-1 -F path=/bin/kmod -k T1215_Kernel_Modules_and_Extensions
+-a always,exit -F perm=x -F auid!=-1 -F path=/sbin/insmod -k T1215_Kernel_Modules_and_Extensions
+-a always,exit -F perm=x -F auid!=-1 -F path=/sbin/modprobe -k T1215_Kernel_Modules_and_Extensions
+-a always,exit -F perm=x -F auid!=-1 -F path=/sbin/rmmod -k T1215_Kernel_Modules_and_Extensions
+-a always,exit -F arch=b64 -S finit_module -S init_module -S delete_module -F auid!=-1 -k T1215_Kernel_Modules_and_Extensions
+-a always,exit -F arch=b32 -S finit_module -S init_module -S delete_module -F auid!=-1 -k T1215_Kernel_Modules_and_Extensions
 ## Modprobe configuration
--w /etc/modprobe.conf -p wa -k modprobe
--w /etc/modprobe.d/ -p wa -k modprobe
+-w /etc/modprobe.conf -p wa -k T1215_Kernel_Modules_and_Extensions
+-w /etc/modprobe.d/ -p wa -k T1215_Kernel_Modules_and_Extensions
 
 ## KExec usage (all actions)
--a always,exit -F arch=b64 -S kexec_load -k KEXEC
--a always,exit -F arch=b32 -S sys_kexec_load -k KEXEC
+-a always,exit -F arch=b64 -S kexec_load -k T1215_Kernel_Modules_and_Extensions_KEXEC
+-a always,exit -F arch=b32 -S sys_kexec_load -k T1215_Kernel_Modules_and_Extensions_KEXEC
 
 ## Special files
 -a exit,always -F arch=b32 -S mknod -S mknodat -k specialfiles
@@ -40,12 +40,12 @@
 -a always,exit -F arch=b32 -S swapon -S swapoff -F auid!=-1 -k swap
 
 ## Time
--a exit,always -F arch=b32 -S adjtimex -S settimeofday -S clock_settime -k T1099_Timestamp
--a exit,always -F arch=b64 -S adjtimex -S settimeofday -S clock_settime -k T1099_Timestamp
--a always,exit -F arch=b32 -S clock_settime -k T1099_Timestamp
--a always,exit -F arch=b64 -S clock_settime -k T1099_Timestamp
+-a exit,always -F arch=b32 -S adjtimex -S settimeofday -S clock_settime -k T1099_Timestomp
+-a exit,always -F arch=b64 -S adjtimex -S settimeofday -S clock_settime -k T1099_Timestomp
+-a always,exit -F arch=b32 -S clock_settime -k T1099_Timestomp
+-a always,exit -F arch=b64 -S clock_settime -k T1099_Timestomp
 ### Local time zone
--w /etc/localtime -p wa -k T1099_Timestamp
+-w /etc/localtime -p wa -k T1099_Timestomp
 
 ## Stunnel
 -w /usr/sbin/stunnel -p x -k T1079_Multilayer_Encryption
@@ -70,25 +70,70 @@
 -w /etc/anacrontab -p wa -k T1168_Local_Job_Scheduling
 
 ## User, group, password databases
--w /etc/group -p wa -k etcgroup
--w /etc/passwd -p wa -k etcpasswd
--w /etc/gshadow -k etcgroup
--w /etc/shadow -k etcpasswd
--w /etc/security/opasswd -k opasswd
+-w /etc/group -p wa -k T1078_Valid_Accounts_etcgroup
+-w /etc/passwd -p wa -k T1078_Valid_Accounts_etcpasswd
+-w /etc/gshadow -k T1078_Valid_Accounts_etcgroup
+-w /etc/shadow -k T1078_Valid_Accounts_etcpasswd
+-w /etc/security/opasswd -k T1078_Valid_Accounts_opasswd
 
 ## Sudoers file changes
--w /etc/sudoers -p wa -k sudoers
+-w /etc/sudoers -p wa -k T1078_Valid_Accounts_sudoers
 
 ## Passwd
--w /usr/bin/passwd -p x -k passwd_modification
+-w /usr/bin/passwd -p x -k T1078_Valid_Accounts_passwd_modification
 
 ## Tools to change group identifiers
--w /usr/sbin/groupadd -p x -k group_modification
--w /usr/sbin/groupmod -p x -k group_modification
--w /usr/sbin/addgroup -p x -k group_modification
--w /usr/sbin/useradd -p x -k user_modification
--w /usr/sbin/usermod -p x -k user_modification
--w /usr/sbin/adduser -p x -k user_modification
+-w /usr/sbin/groupadd -p x -k T1078_Valid_Accounts_group_modification
+-w /usr/sbin/groupmod -p x -k T1078_Valid_Accounts_group_modification
+-w /usr/sbin/addgroup -p x -k T1078_Valid_Accounts_group_modification
+-w /usr/sbin/useradd -p x -k T1078_Valid_Accounts_user_modification
+-w /usr/sbin/usermod -p x -k T1078_Valid_Accounts_user_modification
+-w /usr/sbin/adduser -p x -k T1078_Valid_Accounts_user_modification
+
+## Privleged Command Execution Related Events
+# Seems to be too spammy - needs to be further tested
+#-a exit,always -F arch=b64 -F euid=0 -S execve -k T1078_Valid_Accounts
+#-a exit,always -F arch=b32 -F euid=0 -S execve -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/sbin/userdel -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/bin/ping -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/bin/umount -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/bin/mount -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/bin/su -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/bin/chgrp -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/bin/ping6 -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/sbin/pam_timestamp_check -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/sbin/unix_chkpwd -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/sbin/pwck -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/sbin/suexec -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/sbin/usermod -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/sbin/newusers -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/sbin/groupdel -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/sbin/semanage -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/sbin/usernetctl -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/sbin/ccreds_validate -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/sbin/userhelper -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+###-a always,exit -F path=/usr/libexec/openssh/ssh-keysign -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/Xorg -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/rlogin -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/sudoedit -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/at -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/rsh -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/gpasswd -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/kgrantpty -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/crontab -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/sudo -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/staprun -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/rcp -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/passwd -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/chsh -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/chfn -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/chage -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/setfacl -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/chacl -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/chcon -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/newgrp -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/newrole -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
+#-a always,exit -F path=/usr/bin/kpac_dhcp_helper -F perm=x -F auid>=500 -F auid!=4294967295 -k T1078_Valid_Accounts
 
 ## Login configuration and information
 -w /etc/login.defs -p wa -k login
@@ -134,10 +179,10 @@
 -w /etc/ssh/sshd_config -k sshd
 
 # Systemd
--w /bin/systemctl -p x -k systemd 
--w /etc/systemd/ -p wa -k systemd
--w /lib/systemd/ -p wa -k systemd
--w /usr/bin/journalctl -p x -k journalctl
+-w /bin/systemctl -p x -k T1031+T1050_Services
+-w /etc/systemd/ -p wa -k T1031+T1050_Services
+-w /lib/systemd/ -p wa -k T1031+T1050_Services
+-w /usr/bin/journalctl -p x -k T1031+T1050_Services
 
 ## SELinux events that modify the system's Mandatory Access Controls (MAC)
 -w /etc/selinux/ -p wa -k mac_policy
@@ -149,8 +194,8 @@
 -w /sbin/halt -p x -k power
 
 ## Session initiation information
--w /var/run/utmp -p wa -k session
--w /var/log/btmp -p wa -k session
--w /var/log/wtmp -p wa -k session
+-w /var/run/utmp -p wa -k T1108_Redundant_Access
+-w /var/log/btmp -p wa -k T1108_Redundant_Access
+-w /var/log/wtmp -p wa -k T1108_Redundant_Access
 
 
