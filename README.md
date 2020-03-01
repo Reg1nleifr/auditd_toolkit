@@ -2,14 +2,11 @@
 auditd_toolkit.sh
 script for configuring auditd collection
 
+# selinux port for auditing
+semanage port -a -t audit_port_t -p tcp 2888 # use whatever port you want to forward the logs to (REPLACEWITHPORT in template!)
+
 # rsyslog forwarder/listener example
 rsyslog/\*.conf
 can be used for forwarding audit logs - although it is recommended to use audisp instead.
 
 # audit rules examples
-rules.d/\*.rules - ruleset that is recommended for any server.
-
-rules.d\/*.webservername.optional - optional if the webserver is installed. Needs adjustment.
-  
-rules.d\/*.heavyload.optional - optional if the server can handle these events.
-
