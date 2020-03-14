@@ -2,6 +2,18 @@
 ```auditd_toolkit.sh```
 script for configuring auditd collection
 
+# restart auditd manual
+
+```
+service auditd stop
+# wait a few seconds
+augenrules
+service auditd start
+# check what rules are loaded
+auditctl -l
+service auditd status
+```
+
 # selinux add port for forwarding audit events
 Replace port 2888 with any other port
 ```semanage port -a -t audit_port_t -p tcp 2888```
@@ -23,7 +35,8 @@ Additional 061_installed_software.rules.manual can be used for manually adding s
 Additional 061_application_data.rules.manual can be used for manually adding critical application data on the watched system.
 
 Additional *.optional can be used for watching connection syscalls and unsuccessful file operations.
- These events are considered to be very noisy but might be required for compliance reasons.
+These events are considered to be very noisy but might be required for compliance reasons.
+
 Additional *.web rules for the webservers: tomcat, nginx, apache.
 
 Active exploitation of the ghostcat vulnerability while writing files is discovered by the tomcat ruleset.
