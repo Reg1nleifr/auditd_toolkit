@@ -64,7 +64,7 @@ Active exploitation of the ghostcat vulnerability while writing files is discove
 ```
 
 # auditbeat installation guide
-Installation of auditbeat
+Installation of auditbeat. Config files can be found under /etc/auditbeat/
 
 ## rpm
 ```
