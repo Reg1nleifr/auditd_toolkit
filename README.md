@@ -63,5 +63,26 @@ Active exploitation of the ghostcat vulnerability while writing files is discove
 └── 999_activate.rules
 ```
 
+# auditbeat installation guide
+Installation of auditbeat
+
+## rpm
+```
+curl -L -O https://artifacts.elastic.co/downloads/beats/auditbeat/auditbeat-7.6.1-x86_64.rpm
+sudo rpm -vi auditbeat-7.6.1-x86_64.rpm
+```
+
+## deb
+```
+curl -L -O https://artifacts.elastic.co/downloads/beats/auditbeat/auditbeat-7.6.1-amd64.deb
+sudo dpkg -i auditbeat-7.6.1-amd64.deb
+```
+
+## linux
+```
+curl -L -O https://artifacts.elastic.co/downloads/beats/auditbeat/auditbeat-7.6.1-linux-x86_64.tar.gz
+tar xzvf auditbeat-7.6.1-linux-x86_64.tar.gz
+```
+
 # auditbeat rule examples - tbd
 Same as normal audit rules - incompatbile rules are removed.
