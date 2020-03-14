@@ -1,0 +1,19 @@
+# High volume events - disable if it generates too much load
+
+### T1107_File_Deletion -------------------------------------------------------
+
+## File Deletion Events by User
+-a always,exit -F arch=b32 -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k T1107_File_Deletion
+-a always,exit -F arch=b64 -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k T1107_File_Deletion
+
+### T1070_Indicator_Removal_on_Host -------------------------------------------
+
+## File Deletion Events by Root
+-a always,exit -F arch=b32 -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid=0 -k T1070_Indicator_Removal_on_Host
+-a always,exit -F arch=b64 -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid=0 -k T1070_Indicator_Removal_on_Host
+
+### T1005_Data_from_Local_System ----------------------------------------------
+
+## Data Copy(Local)
+-w /usr/bin/cp -p x -k T1005_Data_from_Local_System
+-w /usr/bin/dd -p x -k T1005_Data_from_Local_System
