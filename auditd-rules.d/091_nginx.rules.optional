@@ -1,0 +1,6 @@
+### NGINX 
+# whitelisting
+-a exit,never -F dir=/srv/www/ -F euid=nginx -k nginx_webignor_serving_dir
+-a exit,never -F dir=/var/log/nginx/ -F euid=nginx -k nginx_webignor_log_dir
+# blacklist
+-a exit,always -F dir=/ -F euid=nginx -F perm=rwxa -k T1190_Exploit_Public_Facing_Application_nginx

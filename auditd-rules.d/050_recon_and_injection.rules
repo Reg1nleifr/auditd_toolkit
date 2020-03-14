@@ -1,0 +1,96 @@
+# Special Rules ---------------------------------------------------------------
+
+### T1055_Process_Injection_32bit_api -----------------------------------------
+
+## Library search paths
+-w /etc/ld.so.conf -p wa -k T1055_Process_Injection_ld
+-w /etc/ld.so.preload -k T1055_Process_Injection_ld
+
+## Injection
+### These rules watch for code injection by the ptrace facility.
+### This could indicate someone trying to do something bad or just debugging
+-a always,exit -F arch=b32 -S ptrace -k T1055_Process_Injection_tracing
+-a always,exit -F arch=b64 -S ptrace -k T1055_Process_Injection_tracing
+-a always,exit -F arch=b32 -S ptrace -F a0=0x4 -k T1055_Process_Injection_code
+-a always,exit -F arch=b64 -S ptrace -F a0=0x4 -k T1055_Process_Injection_code
+-a always,exit -F arch=b32 -S ptrace -F a0=0x5 -k T1055_Process_Injection_data
+-a always,exit -F arch=b64 -S ptrace -F a0=0x5 -k T1055_Process_Injection_data
+-a always,exit -F arch=b32 -S ptrace -F a0=0x6 -k T1055_Process_Injection_register
+-a always,exit -F arch=b64 -S ptrace -F a0=0x6 -k T1055_Process_Injection_register
+
+## 32bit API Exploitation
+### If you are on a 64 bit platform, everything _should_ be running
+### in 64 bit mode. This rule will detect any use of the 32 bit syscalls
+### because this might be a sign of someone exploiting a hole in the 32
+### bit API.
+-a always,exit -F arch=b32 -S all -k T1055_Process_Injection_32bit_api
+
+### T1087_Account_Discovery ---------------------------------------------------
+
+## Recon Related Events
+-w /etc/group -p r -k T1087_Account_Discovery
+-w /etc/passwd -p r -k T1087_Account_Discovery
+-w /etc/gshadow -p r -k T1087_Account_Discovery
+-w /etc/shadow -p r -k T1087_Account_Discovery
+-w /etc/security/opasswd -p r -k T1087_Account_Discovery
+-w /usr/sbin/nologin -k T1087_Account_Discovery
+-w /sbin/nologin -k T1087_Account_Discovery
+
+### T1033_System_Owner_User_Discovery -----------------------------------------
+
+## Recon Related Events
+-w /usr/bin/whoami -p x -k T1033_System_Owner_User_Discovery
+-w /usr/bin/who -p x -k T1033_System_Owner_User_Discovery
+-w /usr/bin/w -p x -k T1033_System_Owner_User_Discovery
+
+### T1082_System_Information_Discovery ----------------------------------------
+
+## Recon Related Events
+-w /etc/aliases -p r -k T1082_System_Information_Discovery
+-w /etc/issue -p r -k T1082_System_Information_Discovery
+-w /etc/issue.net -p r -k T1082_System_Information_Discovery
+-w /etc/redhat-release -p r -k T1082_System_Information_Discovery
+-w /usr/bin/id -p x -k T1082_System_Information_Discovery
+-w /usr/bin/uname -p x -k T1082_System_Information_Discovery
+-w /etc/hostname -p r -k T1082_System_Information_Discovery
+-w /sbin/iptables -p x -k T1082_System_Information_Discovery
+-w /sbin/ifconfig -p x -k T1082_System_Information_Discovery
+-w /etc/login.defs -p wa -k T1082_System_Information_Discovery
+-w /etc/resolv.conf -k T1016_System_Network_Configuration_Discovery
+-w /etc/hosts.allow -k T1016_System_Network_Configuration_Discovery
+-w /etc/hosts.deny -k T1016_System_Network_Configuration_Discovery
+-w /etc/securetty -p wa -k T1082_System_Information_Discovery
+-w /var/log/faillog -p wa -k T1082_System_Information_Discovery
+-w /var/log/lastlog -p wa -k T1082_System_Information_Discovery
+-w /var/log/tallylog -p wa -k T1082_System_Information_Discovery
+-w /usr/sbin/tcpdump -p x -k T1049_System_Network_Connections_discovery
+-w /usr/sbin/traceroute -p x -k T1049_System_Network_Connections_discovery
+-w /usr/bin/wireshark -p x -k T1049_System_Network_Connections_discovery
+-w /usr/bin/rawshark -p x -k T1049_System_Network_Connections_discovery
+
+###  T1081_Credentials_In_Files ------------------------------------------------
+
+## Recon Related Events
+-w /usr/bin/grep -p x -k T1081_Credentials_In_Files
+-w /usr/bin/egrep -p x -k T1081_Credentials_In_Files
+
+### T1057_Process_Discovery ---------------------------------------------------
+
+## Recon Related Events
+-w /usr/bin/ps -p x -k T1057_Process_Discovery
+
+### T1219_Remote_Access_Tools -------------------------------------------------
+
+## Suspicious activity
+-w /usr/bin/wget -p x -k T1219_Remote_Access_Tools
+-w /usr/bin/curl -p x -k T1219_Remote_Access_Tools
+-w /bin/nc.traditional -p x -k T1219_Remote_Access_Tools
+-w /bin/nc -p x -k T1219_Remote_Access_Tools
+-w /usr/bin/base64 -p x -k T1219_Remote_Access_Tools
+-w /bin/netcat -p x -k T1219_Remote_Access_Tools
+-w /usr/bin/ncat -p x -k T1219_Remote_Access_Tools
+-w /usr/bin/ssh -p x -k T1219_Remote_Access_Tools
+-w /usr/bin/socat -p x -k T1219_Remote_Access_Tools
+-w /usr/bin/wireshark -p x -k T1219_Remote_Access_Tools
+-w /usr/bin/rawshark -p x -k T1219_Remote_Access_Tools
+-w /usr/bin/rdesktop -p x -k T1219_Remote_Access_Tools

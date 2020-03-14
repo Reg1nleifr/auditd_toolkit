@@ -1,6 +1,0 @@
-### NGINX 
-# whitelisting
--a exit,never -F dir=/srv/www/ -F euid=nginx -k nginx_webignor
--a exit,never -F dir=/var/log/nginx/ -F euid=nginx -k nginx_webignor
-# blacklist
--a exit,always -F dir=/ -F euid=nginx -F perm=rwxa -k nginx_suspicious

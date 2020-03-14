@@ -1,0 +1,8 @@
+### APACHE 
+# whitelist
+-a exit,never -F dir=/var/www/ -F euid=apache -k apache_webignor_serving_dir
+-a exit,never -F dir=/var/log/httpd/ -F euid=apache -k apache_webignor_log_dir
+-a exit,never -F dir=/etc/httpd/ -F euid=apache -F perm=wxa -k apache_webignor_etc_dir
+-a exit,never -F path=/usr/share/zoneinfo/UTC -F euid=apache -F perm=wxa -k apache_webignor_tzinfo_dir
+# blacklist
+-a exit,always -F dir=/ -F euid=apache -F perm=rwxa -k T1190_Exploit_Public_Facing_Application_apache

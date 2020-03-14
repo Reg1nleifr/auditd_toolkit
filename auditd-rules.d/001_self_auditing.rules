@@ -1,0 +1,30 @@
+#      ___             ___ __      __
+#     /   | __  ______/ (_) /_____/ /
+#    / /| |/ / / / __  / / __/ __  / 
+#   / ___ / /_/ / /_/ / / /_/ /_/ /  
+#  /_/  |_\__,_/\__,_/_/\__/\__,_/   
+#
+# Linux Audit Daemon
+# /etc/audit/audit.rules
+# 
+# Based on rules published here:
+#
+# https://github.com/bfuzzy/auditd-attack
+# https://github.com/Neo23x0/auditd
+#
+
+# Self Auditing ---------------------------------------------------------------
+
+## Audit the audit logs
+### Successful and unsuccessful attempts to read/write information from the audit records
+-w /var/log/audit/ -k auditlog
+
+## Auditd configuration
+### Modifications to audit configuration that occur while the audit collection functions are operating
+-w /etc/audit/ -p wa -k auditconfig
+-w /etc/libaudit.conf -p wa -k auditconfig
+-w /etc/audisp/ -p wa -k audispconfig
+
+## Monitor for use of audit management tools
+-w /sbin/auditctl -p x -k audittools
+-w /sbin/auditd -p x -k audittools

@@ -1,23 +1,13 @@
-# Software Management ---------------------------------------------------------
-
-# RPM (Redhat/CentOS/Fedora)
--w /usr/bin/rpm -p x -k software_mgmt
--w /usr/bin/yum -p x -k software_mgmt
--w /usr/bin/dnf -p x -k software_mgmt
-
-# YAST/Zypper/RPM (SuSE)
--w /sbin/yast -p x -k yast
--w /sbin/yast2 -p x -k yast
--w /bin/rpm -p x -k software_mgmt
--w /usr/bin/zypper -k software_mgmt
-
-# DPKG / APT-GET (Debian/Ubuntu)
--w /usr/bin/dpkg -p x -k software_mgmt
--w /usr/bin/apt-add-repository -p x -k software_mgmt
--w /usr/bin/apt-get -p x -k software_mgmt
--w /usr/bin/aptitude -p x -k software_mgmt
 
 # Special Software ------------------------------------------------------------
+
+### T1222_File_and_Directory_Permissions_Modification_Apparmor ----------------
+-w /etc/apparmor/ -p wa -k T1222_File_and_Directory_Permissions_Modification_apparmor
+-w /etc/apparmor.d/ -p wa -k T1222_File_and_Directory_Permissions_Modification_apparmor
+-w /sbin/apparmor_parser -p x -k T1222_File_and_Directory_Permissions_Modification_apparmor
+-w /usr/sbin/aa-complain -p x -k T1222_File_and_Directory_Permissions_Modification_apparmor
+-w /usr/sbin/aa-disable -p x -k T1222_File_and_Directory_Permissions_Modification_apparmor
+-w /usr/sbin/aa-enforce -p x -k T1222_File_and_Directory_Permissions_Modification_apparmor
 
 ## GDS specific secrets
 -w /etc/puppet/ssl -p wa -k puppet_ssl
@@ -50,4 +40,3 @@
 # Backup Software ------------------------------------------------------------
 # SUSE / Btrfs backup
 -w /usr/sbin/snapperd -p x -k snapperd_backup
-

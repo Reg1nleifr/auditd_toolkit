@@ -1,0 +1,12 @@
+### TOMCAT 
+# whitelist
+-a exit,never -F dir=/srv/tomcat -F euid=tomcat -k tomcat_webignore_serving_dir
+-a exit,never -F dir=/var/log/tomcat/ -F euid=tomcat -k tomcat_webignore_log_dir
+-a exit,never -F dir=/var/cache/tomcat/ -F euid=tomcat -k tomcat_webignore_cache_dir
+-a exit,never -F dir=/sys/fs/cgroup/memory/system.slice/tomcat.service/ -F euid=tomcat -k tomcat_webignore_memory_dir
+-a exit,never -F dir=/sys/fs/cgroup/cpu,cpuacct/cpu.shares -F euid=tomcat -k tomcat_webignore_memory_dir
+-a exit,never -F dir=/usr/share/tomcat/conf/tomcat-users.xml -F euid=tomcat -k tomcat_webignore_user_dir
+-a exit,never -F dir=/usr/share/tomcat/work/ -F euid=tomcat -k tomcat_webignore_work_dir
+-a exit,never -F dir=/usr/lib64/jvm -F euid=tomcat -F perm=xa -k tomcat_webignore_jvm_dir
+# blacklist everything else
+-a exit,always -F dir=/ -F euid=tomcat -F perm=rwxa -k T1190_Exploit_Public_Facing_Application_Tomcat
