@@ -17,11 +17,17 @@ This rsyslog configuratoin can be used for forwarding audit logs - it is recomme
 
 # auditd rule examples
 The auditing rules contain a set of recommended rules in the mitre style.
+
 Additional 061_installed_software.rules.manual can be used for manually adding special watched software on the system.
+
 Additional 061_application_data.rules.manual can be used for manually adding critical application data on the watched system.
-Additional *.optional can be used for watching connection syscalls and unsuccessful file operations. These events are considered to be very noisy but might be required for compliance reasons.
+
+Additional *.optional can be used for watching connection syscalls and unsuccessful file operations.
+ These events are considered to be very noisy but might be required for compliance reasons.
 Additional *.web rules for the webservers: tomcat, nginx, apache.
+
 Active exploitation of the ghostcat vulnerability while writing files is discovered by the tomcat ruleset.
+
 
 ```
 ├── 000_initial.rules
