@@ -1,0 +1,3 @@
+# add critical application data here
+
+#-w /etc/myappliaction/app.conf -p rwa -k myapplicationkey
