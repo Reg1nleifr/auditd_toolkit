@@ -15,7 +15,7 @@ Replace port 2888 with any other port
 
 This rsyslog configuratoin can be used for forwarding audit logs - it is recommended to use audisp for forwarding audit events instead.
 
-# audit rules examples
+# auditd rule examples
 The auditing rules contain a set of recommended rules in the mitre style.
 Additional 061_installed_software.rules.manual can be used for manually adding special watched software on the system.
 Additional 061_application_data.rules.manual can be used for manually adding critical application data on the watched system.
@@ -44,3 +44,5 @@ Active exploitation of the ghostcat vulnerability while writing files is discove
 └── 999_activate.rules
 ```
 
+# auditbeat rule examples - tbd
+Same as normal audit rules - incompatbile rules are removed.
